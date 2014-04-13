@@ -4,7 +4,7 @@
 
 /* #include <libtasn1.h> */
 
-const ASN1_ARRAY_TYPE pk_asn1_tab[] = {
+const asn1_static_node pk_asn1_tab[] = {
   { "PK", 536872976, NULL },
   { NULL, 1073741836, NULL },
   { "RSAPublicKey", 1610612741, NULL },
@@ -63,7 +63,7 @@ const ASN1_ARRAY_TYPE pk_asn1_tab[] = {
   { "g", 1073741827, NULL },
   { "Y", 1073741827, NULL },
   { "priv", 3, NULL },
-  { "DHParameter", 536870917, NULL },
+  { "DHParameter", 1610612741, NULL },
   { "prime", 1073741827, NULL },
   { "base", 1073741827, NULL },
   { "privateValueLength", 16387, NULL },
