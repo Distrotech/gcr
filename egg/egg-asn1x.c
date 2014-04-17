@@ -2910,23 +2910,18 @@ egg_asn1x_get_integer_as_raw (GNode *node)
 }
 
 GBytes *
-egg_asn1x_get_integer_as_usg (GNode *node)
+egg_asn1x_data_to_usg (GBytes *data,
+                       gboolean already_unsigned)
 {
-	const guchar *p;
-	Anode *an;
+	const guint8 *p;
 	gboolean sign;
 	gsize len;
 
-	g_return_val_if_fail (node != NULL, FALSE);
-	g_return_val_if_fail (anode_def_type (node) == EGG_ASN1X_INTEGER, FALSE);
+	g_return_val_if_fail (data != NULL, NULL);
 
-	an = node->data;
-	if (an->value == NULL)
-		return NULL;
+	p = g_bytes_get_data (data, &len);
 
-	p = g_bytes_get_data (an->value, &len);
-
-	if (!an->guarantee_unsigned) {
+	if (!already_unsigned) {
 		sign = !!(p[0] & 0x80);
 		if (sign) {
 			g_warning ("invalid two's complement integer"); /* UNREACHABLE: */
@@ -2945,7 +2940,22 @@ egg_asn1x_get_integer_as_usg (GNode *node)
 
 	return g_bytes_new_with_free_func (p, len,
 	                                   (GDestroyNotify)g_bytes_unref,
-	                                   g_bytes_ref (an->value));
+	                                   g_bytes_ref (data));
+}
+
+GBytes *
+egg_asn1x_get_integer_as_usg (GNode *node)
+{
+	Anode *an;
+
+	g_return_val_if_fail (node != NULL, NULL);
+	g_return_val_if_fail (anode_def_type (node) == EGG_ASN1X_INTEGER, NULL);
+
+	an = node->data;
+	if (an->value == NULL)
+		return NULL;
+
+	return egg_asn1x_data_to_usg (an->value, an->guarantee_unsigned);
 }
 
 void

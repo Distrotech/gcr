@@ -265,6 +265,9 @@ gconstpointer       egg_asn1x_element_content        (const guchar *data,
                                                       gsize n_data,
                                                       gsize *n_content);
 
+GBytes *            egg_asn1x_data_to_usg            (GBytes *data,
+                       				      gboolean already_unsigned);
+
 #define             egg_asn1x_assert(expr, node) \
 	do { if G_LIKELY(expr) ; else \
 		g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, \
